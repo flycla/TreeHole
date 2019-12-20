@@ -1,4 +1,4 @@
-from flask import Flask, request, \
+from flask import Flask, request, abort, \
     redirect, url_for, \
     render_template, escape, jsonify
 from flask_socketio import SocketIO, emit
@@ -48,6 +48,8 @@ def add_record():
     nickname = escape(request.form.get('nickname'))
     content = escape(request.form.get('content'))
     remark = escape(request.form.get('remark'))
+    if content == "": # disallow empty request
+        abort(400)
     result = Records.add_record((nickname, content, remark))
     socketIO.emit('recordUpdate', result, broadcast=True)
     return jsonify(result)
@@ -64,7 +66,7 @@ def index():
         return render_template('index.html')
 
 @app.errorhandler(405)
-def page_not_found(_):
+def method_not_allowed(_):
     return redirect(url_for('index'))
 
 
