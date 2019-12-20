@@ -53,10 +53,10 @@ $(document).ready(function() {
   });
 
   $('.footer').waypoint(function() {
-    console.log('yes');
     $('.loader-wrapper').fadeIn();
     getRecords(5, function (err, response) {
       if(!err) {
+        $('.loader-wrapper').fadeOut();
         var len = response.length;
         if (len > 0) {
           last = response[0].timestamp;
@@ -64,7 +64,6 @@ $(document).ready(function() {
             record = toRecord(response[i]);
             $('#records').append(record);
           }
-          $('.loader-wrapper').fadeOut();
         }
       }
     });
