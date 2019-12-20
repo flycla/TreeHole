@@ -1,3 +1,17 @@
+var onSubmit = function () {
+  $.post("add", {
+      nickname: $('#nickname').val(),
+      content: $('#content').val(),
+      remark: $('#remark').val(),
+      recaptcha: grecaptcha.getResponse()
+    }, function(data, status) {
+      $('#nickname').val("");
+      $('#content').val("");
+      $('#remark').val("");
+      $("#dialog").modal('hide');
+  });
+}
+
 $(document).ready(function() {
   var socket = io.connect(window.location.href);
   var last = null;
@@ -39,16 +53,7 @@ $(document).ready(function() {
   $("#dialog").on('shown.bs.modal', function (e) {
     $("#submit").click(function(e) {
       e.preventDefault();
-      $.post("add", {
-          nickname: $('#nickname').val(),
-          content: $('#content').val(),
-          remark: $('#remark').val()
-        }, function(data, status) {
-          $('#nickname').val("");
-          $('#content').val("");
-          $('#remark').val("");
-          $("#dialog").modal('hide');
-      });
+      grecaptcha.execute();
     });
   });
 

@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, request, abort, \
     redirect, url_for, \
     render_template, escape, jsonify
@@ -48,8 +49,17 @@ def add_record():
     nickname = escape(request.form.get('nickname'))
     content = escape(request.form.get('content'))
     remark = escape(request.form.get('remark'))
+    recaptcha = request.form.get('recaptcha')
     if content == "": # disallow empty request
         abort(400)
+    verify = requests.post(RECAPTCHA, {
+        'secret': RECAPTCHA_SERVKEY,
+        'response': recaptcha,
+        'remoteip': get_remote_address()
+    }).json()
+    if not verify['success']:
+        app.logger.warn(verify)
+        abort(403)
     result = Records.add_record((nickname, content, remark))
     socketIO.emit('recordUpdate', result, broadcast=True)
     return jsonify(result)
@@ -63,7 +73,7 @@ def index():
         else:
             return render_template('index.html', action='logout')
     else:
-        return render_template('index.html')
+        return render_template('index.html', sitekey=RECAPTCHA_SITEKEY)
 
 @app.errorhandler(405)
 def method_not_allowed(_):

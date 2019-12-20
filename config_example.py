@@ -13,3 +13,7 @@ LOG_FORMAT = '%(asctime)s %(levelname)s:%(message)s'
 CAS_ENABLE = False
 CAS_SERVER = 'http://foo/cas'
 CAS_AFTER_LOGIN = 'index'
+
+RECAPTCHA = 'https://www.recaptcha.net/recaptcha/api/siteverify'
+RECAPTCHA_SERVKEY = 'YOUR RECAPTCHA v2 SERVKEY'
+RECAPTCHA_SITEKEY = 'YOUR RECAPTCHA v2 SITEKEY'
