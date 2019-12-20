@@ -1,2 +1,2 @@
 # TreeHole
-Lightweight TreeHole with Flask, Sqlite and WebSocket
+Lightweight TreeHole with Flask, Sqlite, WebSocket and reCAPTCHA.
