@@ -22,7 +22,7 @@ if CAS_ENABLE:
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    default_limits=["10 per day"]
+    default_limits=["50 per minute"]
 )
 
 @socketIO.on('connect')
