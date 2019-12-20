@@ -3,6 +3,8 @@ from flask import Flask, request, \
     render_template, escape, jsonify
 from flask_socketio import SocketIO, emit
 from flask_yarn import Yarn
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from db import Records
 from config import *
@@ -16,6 +18,11 @@ Yarn(app)
 if CAS_ENABLE:
     from flask_cas import CAS
     cas = CAS(app)
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["10 per day"]
+)
 
 @socketIO.on('connect')
 def test_connect():
@@ -36,6 +43,7 @@ def query_records():
 
 
 @app.route('/add', methods=['POST'])
+@limiter.limit("10/day")
 def add_record():
     nickname = escape(request.form.get('nickname'))
     content = escape(request.form.get('content'))
