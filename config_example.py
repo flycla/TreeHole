@@ -10,5 +10,6 @@ LOG_FILE = ''
 LOG_LEVEL = logging.DEBUG
 LOG_FORMAT = '%(asctime)s %(levelname)s:%(message)s'
 
+CAS_ENABLE = False
 CAS_SERVER = 'http://foo/cas'
 CAS_AFTER_LOGIN = 'index'

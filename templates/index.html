@@ -56,7 +56,9 @@
             <ul class="nav nav-pills pull-right">
                 <li class="active">
                     <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#dialog">Tell Me</button>
+                    {% if action %}
                     <a class="btn btn-primary btn-lg" href="/{{ action }}" id="{{ action }}">{{ action }}</a>
+                    {% endif %}
                 </li>
             </ul>
             <h3 class="text-muted">TreeHole</h3>

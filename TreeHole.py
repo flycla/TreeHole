@@ -13,7 +13,9 @@ app.config['CAS_SERVER'] = CAS_SERVER
 app.config['CAS_AFTER_LOGIN'] = CAS_AFTER_LOGIN
 socketIO = SocketIO(app)
 Yarn(app)
-cas = CAS(app)
+if CAS_ENABLE:
+    from flask_cas import CAS
+    cas = CAS(app)
 
 @socketIO.on('connect')
 def test_connect():
@@ -45,11 +47,13 @@ def add_record():
 
 @app.route('/')
 def index():
-    if cas.username is None:
-        return render_template('index.html', action='login')
+    if CAS_ENABLE:
+        if cas.username is None:
+            return render_template('index.html', action='login')
+        else:
+            return render_template('index.html', action='logout')
     else:
-        return render_template('index.html', action='logout')
-
+        return render_template('index.html')
 
 @app.errorhandler(405)
 def page_not_found(_):
