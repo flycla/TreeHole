@@ -43,7 +43,7 @@ class Records:
     def __init__(self, number, start=None):
         cur = conn.cursor()
         if start:
-            cur.execute('SELECT * FROM Records WHERE timestamp < ? ORDER BY timestamp DESC LIMIT ?',
+            cur.execute('SELECT * FROM Records WHERE timestamp > ? ORDER BY timestamp DESC LIMIT ?',
                         (start, number))
         else:
             cur.execute('SELECT * FROM Records ORDER BY timestamp DESC LIMIT ?',
