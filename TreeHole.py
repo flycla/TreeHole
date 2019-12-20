@@ -1,11 +1,11 @@
 from flask import Flask, request, \
     redirect, url_for, \
-    render_template, jsonify
+    render_template, escape, jsonify
 from flask_socketio import SocketIO, emit
 from flask_yarn import Yarn
-from flask_cas import CAS
 
-from db import *
+from db import Records
+from config import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = APP_SECRET_KEY
@@ -29,17 +29,17 @@ def test_disconnect():
 
 @app.route('/query')
 def query_records():
-    since = request.args.get('since')
-    number = request.args.get('number')
+    since = escape(request.args.get('since'))
+    number = escape(request.args.get('number'))
     records = Records(number, since)
     return jsonify(records.get_records_dict())
 
 
 @app.route('/add', methods=['POST'])
 def add_record():
-    nickname = request.form.get('nickname')
-    content = request.form.get('content')
-    remark = request.form.get('remark')
+    nickname = escape(request.form.get('nickname'))
+    content = escape(request.form.get('content'))
+    remark = escape(request.form.get('remark'))
     result = Records.add_record((nickname, content, remark))
     socketIO.emit('recordUpdate', result, broadcast=True)
     return jsonify(result)
