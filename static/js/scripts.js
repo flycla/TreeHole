@@ -13,12 +13,12 @@ var onSubmit = function () {
 }
 
 $(document).ready(function() {
-  var socket = io.connect(window.location.href);
+  // var socket = io.connect(window.location.href);
   var last = null;
-  socket.on('recordUpdate', function(data) {
+  /*socket.on('recordUpdate', function(data) {
     record = toRecord(data);
     $('#records').prepend(record);
-  });
+  });*/
   function getRecords(number, callback) {
     $.ajax({
       url: 'query',

@@ -12,28 +12,21 @@ from config import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = APP_SECRET_KEY
-app.config['CAS_SERVER'] = CAS_SERVER
-app.config['CAS_AFTER_LOGIN'] = CAS_AFTER_LOGIN
-socketIO = SocketIO(app)
+# socketIO = SocketIO(app)
 Yarn(app)
 if CAS_ENABLE:
     from flask_cas import CAS
+
+    app.config['CAS_SERVER'] = CAS_SERVER
+    app.config['CAS_AFTER_LOGIN'] = CAS_AFTER_LOGIN
+    
     cas = CAS(app)
+
 limiter = Limiter(
     app,
     key_func=get_remote_address,
     default_limits=["50 per minute"]
 )
-
-@socketIO.on('connect')
-def test_connect():
-    emit('my response', {'data': 'Connected'})
-
-
-@socketIO.on('disconnect')
-def test_disconnect():
-    print('Client disconnected')
-
 
 @app.route('/query')
 def query_records():
@@ -61,7 +54,7 @@ def add_record():
         app.logger.warn(verify)
         abort(403)
     result = Records.add_record((nickname, content, remark))
-    socketIO.emit('recordUpdate', result, broadcast=True)
+    # socketIO.emit('recordUpdate', result, broadcast=True)
     return jsonify(result)
 
 
@@ -81,4 +74,5 @@ def method_not_allowed(_):
 
 
 if __name__ == '__main__':
-    socketIO.run(app, host=HOST, port=PORT, debug=DEBUG)
+    # socketIO.run(app, host=HOST, port=PORT, debug=DEBUG)
+    app.run(host=HOST, port=PORT, debug=DEBUG)
